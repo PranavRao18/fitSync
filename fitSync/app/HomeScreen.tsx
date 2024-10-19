@@ -176,8 +176,10 @@ const HomeScreen = () => {
                 </ImageBackground>
             </TouchableOpacity>
         </ScrollView>
+    )}
+    </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
