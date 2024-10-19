@@ -31,9 +31,13 @@ const HomeScreen = () => {
     };
 
     const handleMedication = () => {
-        // router.push('/Medications');
+        router.push('/Medications');
         //When there is some medications already kelgade route, illa andre melgade route
-        router.push('/MyMedications');
+        // router.push('/MyMedications');
+    }
+
+    const handleDiet = () => {
+        router.push('/Diet');
     }
 
     // Pulse animation for right arrow
@@ -58,7 +62,7 @@ const HomeScreen = () => {
         const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
         const isEnd = layoutMeasurement.width + contentOffset.x >= contentSize.width - 20;
         const isStart = contentOffset.x <= 0;
-        
+
         setShowRightArrow(!isEnd);
         setShowLeftArrow(!isStart);
     };
@@ -86,7 +90,9 @@ const HomeScreen = () => {
                     {/* Greeting */}
                     <View style={styles.greetingContainer}>
                         <Text style={styles.greeting}>Hi, {userName}</Text>
-                        <View style={styles.avatarPlaceholder} />
+                        <TouchableOpacity onPress={() => router.push('/Profile')}>
+                            <Ionicons name="person-circle-outline" size={60} color="#666" style={styles.avatarPlaceholder} />
+                        </TouchableOpacity>
                     </View>
 
                     {/* Sync Score Box */}
@@ -97,75 +103,77 @@ const HomeScreen = () => {
                         </Text>
                     </TouchableOpacity>
 
-            {/* Horizontal Scrollable Health Metrics */}
-            <View style={styles.metricWrapper}>
-                <FlatList
-                    data={healthMetrics}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                        <View style={styles.metricBox}>
-                            <Icon name={item.icon} size={30} color="#fff" />
-                            <Text style={styles.metricValue}>{item.value}</Text>
-                            <Text style={styles.metricTitle}>{item.title}</Text>
-                        </View>
-                    )}
-                    contentContainerStyle={styles.metricsContainer}
-                    onScroll={handleScroll}
-                    scrollEventThrottle={16}
-                />
-                {/* Left Arrow Button */}
-                {showLeftArrow && (
-                    <TouchableOpacity style={styles.leftArrow}>
-                        <Ionicons name="chevron-back-outline" size={24} color="#808080" />
+                    {/* Horizontal Scrollable Health Metrics */}
+                    <View style={styles.metricWrapper}>
+                        <FlatList
+                            data={healthMetrics}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity style={styles.metricBox} onPress={() => handleMetricPress(item.title)}>
+                                    <Icon name={item.icon} size={30} color="#fff" />
+                                    <Text style={styles.metricValue}>{item.value}</Text>
+                                    <Text style={styles.metricTitle}>{item.title}</Text>
+                                </TouchableOpacity>
+
+                            )}
+                            contentContainerStyle={styles.metricsContainer}
+                            onScroll={handleScroll}
+                            scrollEventThrottle={16}
+                        />
+                        {/* Left Arrow Button */}
+                        {showLeftArrow && (
+                            <TouchableOpacity style={styles.leftArrow}>
+                                <Ionicons name="chevron-back-outline" size={24} color="#808080" />
+                            </TouchableOpacity>
+                        )}
+                        {/* Right Arrow Button */}
+                        {showRightArrow && (
+                            <Animated.View style={[styles.rightArrow, { transform: [{ scale: rightArrowAnim }] }]}>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#808080" />
+                            </Animated.View>
+                        )}
+                    </View>
+
+                    {/* Dr. Ayu Chatbot Box */}
+                    <TouchableOpacity
+                        style={styles.chatbotBox}
+                        onPress={handleChatBot}
+                    >
+                        <ImageBackground
+                            source={chatbotImg}
+                            style={styles.chatbotImageBackground}
+                            imageStyle={styles.chatbotImage}
+                        >
+                            <View style={styles.overlay} />
+                            <Text style={styles.boxTitle}>Talk to Dr. Ayu</Text>
+                            <Text style={styles.boxDescription}>
+                                Click here to chat with Dr. Ayu, your health assistant.
+                            </Text>
+                        </ImageBackground>
                     </TouchableOpacity>
-                )}
-                {/* Right Arrow Button */}
-                {showRightArrow && (
-                    <Animated.View style={[styles.rightArrow, { transform: [{ scale: rightArrowAnim }] }]}>
-                        <Ionicons name="chevron-forward-outline" size={24} color="#808080" />
-                    </Animated.View>
-                )}
-            </View>
 
-            {/* Dr. Ayu Chatbot Box */}
-            <TouchableOpacity
-                style={styles.chatbotBox}
-                onPress={handleChatBot}
-            >
-                <ImageBackground
-                    source={chatbotImg}
-                    style={styles.chatbotImageBackground}
-                    imageStyle={styles.chatbotImage}
-                >
-                    <View style={styles.overlay} />
-                    <Text style={styles.boxTitle}>Talk to Dr. Ayu</Text>
-                    <Text style={styles.boxDescription}>
-                        Click here to chat with Dr. Ayu, your health assistant.
-                    </Text>
-                </ImageBackground>
-            </TouchableOpacity>
+                    {/* Medications Image Background Box */}
+                    <TouchableOpacity
+                        style={styles.chatbotBox}
+                        onPress={handleMedication}
+                    >
+                        <ImageBackground
+                            source={medicationImg}
+                            style={styles.chatbotImageBackground}
+                            imageStyle={styles.chatbotImage}
+                        >
+                            <View style={styles.overlay} />
+                            <Text style={styles.boxTitle}>Medications</Text>
+                            <Text style={styles.boxDescription}>
+                                View and manage your medications.
+                            </Text>
+                        </ImageBackground>
+                    </TouchableOpacity>
 
-            {/* Medications Image Background Box */}
-            <TouchableOpacity
-                style={styles.chatbotBox}
-                onPress={handleMedication}
-            >
-                <ImageBackground
-                    source={medicationImg}
-                    style={styles.chatbotImageBackground}
-                    imageStyle={styles.chatbotImage}
-                >
-                    <View style={styles.overlay} />
-                    <Text style={styles.boxTitle}>Medications</Text>
-                    <Text style={styles.boxDescription}>
-                        View and manage your medications.
-                    </Text>
-                </ImageBackground>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.chatbotBox}>
+            <TouchableOpacity style={styles.chatbotBox}
+            onPress={handleDiet}>
                 <ImageBackground
                     source={dietImg}
                     style={styles.chatbotImageBackground}
@@ -179,22 +187,22 @@ const HomeScreen = () => {
                 </ImageBackground>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.chatbotBox}>
-                <ImageBackground
-                    source={exerciseImg}
-                    style={styles.chatbotImageBackground}
-                    imageStyle={styles.chatbotImage}
-                >
-                    <View style={styles.overlay} />
-                    <Text style={styles.boxTitle}>Exercises</Text>
-                    <Text style={styles.boxDescription}>
-                        View exercises recommended by Dr. Ayu
-                    </Text>
-                </ImageBackground>
-            </TouchableOpacity>
-        </ScrollView>
-    )}
-    </View>
+                    <TouchableOpacity style={styles.chatbotBox}>
+                        <ImageBackground
+                            source={exerciseImg}
+                            style={styles.chatbotImageBackground}
+                            imageStyle={styles.chatbotImage}
+                        >
+                            <View style={styles.overlay} />
+                            <Text style={styles.boxTitle}>Exercises</Text>
+                            <Text style={styles.boxDescription}>
+                                View exercises recommended by Dr. Ayu
+                            </Text>
+                        </ImageBackground>
+                    </TouchableOpacity>
+                </ScrollView>
+            )}
+        </View>
     );
 }
 
@@ -217,7 +225,7 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     avatarPlaceholder: {
-        backgroundColor: '#999',
+        // backgroundColor: '#999',
         width: 60,
         height: 60,
         borderRadius: 30, // Circular avatar
