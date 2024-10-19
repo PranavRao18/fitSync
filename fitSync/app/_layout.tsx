@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // paddingHorizontal: 15, // Horizontal padding
-    paddingVertical: 10,   // Vertical padding
+    // paddingTop: 30,   // Vertical padding
     backgroundColor: "#f5f5f5", // Optional background color
   },
 });
