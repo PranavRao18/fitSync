@@ -31,9 +31,9 @@ const HomeScreen = () => {
     };
 
     const handleMedication = () => {
-        // router.push('/Medications');
+        router.push('/Medications');
         //When there is some medications already kelgade route, illa andre melgade route
-        router.push('/MyMedications');
+        // router.push('/MyMedications');
     }
 
     // Pulse animation for right arrow

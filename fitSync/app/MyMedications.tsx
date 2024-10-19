@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Animated, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useRouter } from 'expo-router';
 
+type Medication = {
+    id: string;
+    name: string;
+    dosage: string;
+    time: string;
+    beforeMeal: boolean;
+    total: number;
+};
+
 const MyMedicationsScreen = () => {
     const router = useRouter();
-    const [medications, setMedications] = useState([
+    const [medications, setMedications] = useState<Medication[]>([
         { id: '1', name: 'Amoxiciline', dosage: '250mg', time: '8:00 AM', beforeMeal: true, total: 3 },
         { id: '2', name: 'Losartan', dosage: '25mg', time: '8:00 AM', beforeMeal: false, total: 3 },
         { id: '3', name: 'Albuterol', dosage: '50mg', time: '8:00 AM', beforeMeal: true, total: 3 },
@@ -29,7 +38,7 @@ const MyMedicationsScreen = () => {
         );
     };
 
-    const renderMedicationItem = ({ item }) => (
+    const renderMedicationItem = ({ item }: { item: Medication }) => (
         <View style={styles.rowFront}>
             <View style={styles.medicationContainer}>
                 <Text style={styles.timeLabel}>{item.time}</Text>
@@ -40,17 +49,16 @@ const MyMedicationsScreen = () => {
                             {item.beforeMeal ? 'Before Eating' : 'After Eating'} • {item.dosage}
                         </Text>
                     </View>
-                    {/* <Ionicons name="checkmark-circle" size={24} color="#15B9A6" /> */}
                 </View>
             </View>
         </View>
     );
 
-    const renderHiddenItem = (data) => (
+    const renderHiddenItem = (data: { item: Medication }) => (
         <View style={styles.rowBack}>
             <TouchableOpacity
                 style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                onPress={() => router.push(`/EditMedication/${data.item.id}`)}
+                // onPress={() => router.push(`/EditMedication/${data.item.id}`)}
             >
                 <Ionicons name="calendar-outline" size={24} color="#333" />
             </TouchableOpacity>
@@ -108,6 +116,20 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     medicationContainer: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        marginHorizontal: 20,
+        padding: 15,
+        marginVertical: 10,
+        // shadowColor: '#000',
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.1,
+        // shadowRadius: 5,
+        // elevation: 3,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    rowFront: {
         backgroundColor: '#fff',
         borderRadius: 10,
         marginHorizontal: 20,
