@@ -6,6 +6,7 @@ import chatbotImg from '../assets/images/chatbot.png';
 import medicationImg from '../assets/images/medications.png';
 import dietImg from '../assets/images/diet.png';
 import exerciseImg from '../assets/images/exercise.png';
+import HealthMetricScreen from './HealthMetric';
 import { useRouter } from 'expo-router';
 
 // Mock user name and health metrics for demonstration
@@ -19,6 +20,7 @@ const healthMetrics = [
 
 const HomeScreen = () => {
     const router = useRouter();
+    const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
     const [showRightArrow, setShowRightArrow] = useState(true);
     const [showLeftArrow, setShowLeftArrow] = useState(false);
     const rightArrowAnim = new Animated.Value(1);
@@ -61,21 +63,39 @@ const HomeScreen = () => {
         setShowLeftArrow(!isStart);
     };
 
-    return (
-        <ScrollView contentContainerStyle={styles.container} style={{ flex: 1 }}>
-            {/* Greeting */}
-            <View style={styles.greetingContainer}>
-                <Text style={styles.greeting}>Hi, {userName}</Text>
-                <View style={styles.avatarPlaceholder} />
-            </View>
+    const handleMetricPress = (title: string) => {
+        setSelectedMetric(title);
+    };
 
-            {/* Sync Score Box */}
-            <TouchableOpacity style={styles.syncScore}>
-                <Text style={styles.syncTitle}>80.2</Text>
-                <Text style={styles.syncDescription}>
-                    You are fit and healthy, keep going!
-                </Text>
-            </TouchableOpacity>
+    const handleBackToMetrics = () => {
+        setSelectedMetric(null);
+    };
+
+    return (
+        <View style={{ flex: 1 }}>
+            {selectedMetric ? (
+                <View style={{ flex: 1 }}>
+                    <TouchableOpacity onPress={handleBackToMetrics} style={styles.backButton}>
+                        <Ionicons name="arrow-back" size={24} color="#15b9a6" />
+                        <Text style={styles.backButtonText}>Back</Text>
+                    </TouchableOpacity>
+                    <HealthMetricScreen metricName={selectedMetric} />
+                </View>
+            ) : (
+                <ScrollView contentContainerStyle={styles.container} style={{ flex: 1 }}>
+                    {/* Greeting */}
+                    <View style={styles.greetingContainer}>
+                        <Text style={styles.greeting}>Hi, {userName}</Text>
+                        <View style={styles.avatarPlaceholder} />
+                    </View>
+
+                    {/* Sync Score Box */}
+                    <TouchableOpacity style={styles.syncScore}>
+                        <Text style={styles.syncTitle}>80.2</Text>
+                        <Text style={styles.syncDescription}>
+                            You are fit and healthy, keep going!
+                        </Text>
+                    </TouchableOpacity>
 
             {/* Horizontal Scrollable Health Metrics */}
             <View style={styles.metricWrapper}>
@@ -173,8 +193,10 @@ const HomeScreen = () => {
                 </ImageBackground>
             </TouchableOpacity>
         </ScrollView>
+    )}
+    </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -310,6 +332,17 @@ const styles = StyleSheet.create({
         color: '#eee',
         marginTop: 5,
         textAlign: 'center',
+    },
+    backButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        backgroundColor: '#f5f5f5',
+    },
+    backButtonText: {
+        fontSize: 18,
+        color: '#15b9a6',
+        marginLeft: 5,
     },
 });
 
