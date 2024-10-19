@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import DatePicker from 'react-native-datepicker';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
@@ -8,32 +8,51 @@ import { useRouter } from 'expo-router';
 
 const AdditionalDetailsScreen = () => {
     const [gender, setGender] = useState('');
-    const [dob, setDob] = useState('');
+    const [dob, setDob] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false); // Initialize to false
     const [weight, setWeight] = useState('');
     const [height, setHeight] = useState('');
 
     const router = useRouter();
 
     const handleSignUp = async () => {
+        router.navigate('/HomeScreen');
         const payload = {
             gender: gender,
-            date_of_birth: dob,
+            date_of_birth: dob.toISOString().split('T')[0],
             weight: weight,
             height: height,
         };
 
         try {
             const response = await axios.post('https://your-backend-url/api/register', payload);
-            
             if (response.status === 200) {
                 Alert.alert('Success', 'Account created successfully!');
-                router.navigate('/SignIn');
+                router.push('/HomeScreen');
             } else {
                 Alert.alert('Error', 'Something went wrong. Please try again.');
             }
         } catch (error) {
             console.error('Error during sign-up:', error);
             Alert.alert('Error', 'Failed to create account. Please try again.');
+        }
+    };
+
+    const onDateChange = (event: any, selectedDate?: Date) => {
+        if (Platform.OS === 'android') {
+            setShowDatePicker(false); // Hide the picker on Android after selection
+        }
+        if (selectedDate) {
+            setDob(selectedDate);
+        }
+    };
+
+    const showDatePickerComponent = () => {
+        if (Platform.OS === 'ios') {
+            setShowDatePicker(true);
+        } else {
+            // Android behaves differently; we need to set it manually
+            setShowDatePicker(true);
         }
     };
 
@@ -60,16 +79,19 @@ const AdditionalDetailsScreen = () => {
             <View style={styles.labelContainer}>
                 <Text style={styles.label}>Date of Birth</Text>
             </View>
-            <DatePicker
-                style={styles.datePicker}
-                date={dob}
-                mode="date"
-                placeholder="Select Date"
-                format="YYYY-MM-DD"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                onDateChange={(date) => setDob(date)}
-            />
+            <TouchableOpacity onPress={showDatePickerComponent} style={styles.datePickerButton}>
+                <Text style={styles.datePickerText}>{dob.toDateString()}</Text>
+            </TouchableOpacity>
+
+            {showDatePicker && (
+                <DateTimePicker
+                    value={dob}
+                    mode="date"
+                    display="default"
+                    onChange={onDateChange}
+                    maximumDate={new Date()} // Prevents selecting a future date
+                />
+            )}
 
             <View style={styles.labelContainer}>
                 <Text style={styles.label}>Weight (kg)</Text>
@@ -135,8 +157,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
-        borderWidth: 1,
-        borderColor: '#ddd',
         backgroundColor: '#fff',
         paddingVertical: 8,
         paddingHorizontal: 10,
@@ -167,13 +187,21 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         backgroundColor: '#fff',
+        borderColor: '#fff'
     },
-    datePicker: {
+    datePickerButton: {
         width: '100%',
+        padding: 15,
+        backgroundColor: '#ffffff',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
         marginBottom: 15,
+    },
+    datePickerText: {
+        fontSize: 16,
+        color: '#333',
     },
 });
 
-
-
-
+export default AdditionalDetailsScreen;

@@ -20,6 +20,7 @@ const SignUpScreen = () => {
             Alert.alert('Error', 'Passwords do not match. Please try again.');
             return;
         }
+        router.push('/AdditionalSignup');
 
         // Prepare the payload
         const payload = {
