@@ -13,7 +13,7 @@ export default function Index() {
           router.replace('/Chatbot');
         } else {
           // No token found, navigate to login
-          router.replace('/Chatbot');
+          router.replace('/SignIn');
         }
       } catch (error) {
         console.error('Error checking auth status:', error);
