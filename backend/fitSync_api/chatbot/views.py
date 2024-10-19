@@ -1,3 +1,4 @@
+from datetime import date
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -93,3 +94,54 @@ def webhook(request):
         return Response({"error": str(e)}, status=500)
 
 
+def calculate_bmi(weight, height_cm):
+    if weight is None or height_cm is None:
+        return None
+    height_m = height_cm / 100  # Convert cm to meters
+    return round(weight / (height_m ** 2), 2)
+
+def calculate_bmr(weight, height_cm, age, gender):
+    if weight is None or height_cm is None or age is None or gender is None:
+        return None
+    if gender.lower() == "male":
+        return round(10 * weight + 6.25 * height_cm - 5 * age + 5, 2)
+    elif gender.lower() == "female":
+        return round(10 * weight + 6.25 * height_cm - 5 * age - 161, 2)
+    return None
+
+def get_age(birth_date):
+    today = date.today()
+    return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def diet(request):
+    user = request.user  # Get the authenticated user
+    try:
+        patient = Patient.objects.get(user=user)
+        weight_entry = Weight.objects.filter(patient=patient).order_by('-measurement_date').first()
+        weight = weight_entry.value if weight_entry else None
+
+        # Retrieve patient information
+        height_cm = patient.height
+        birth_date = patient.personal_details.date_of_birth
+        gender = patient.personal_details.gender
+        age = get_age(birth_date)
+
+        # Calculate BMI and BMR
+        bmi = calculate_bmi(weight, height_cm)
+        bmr = calculate_bmr(weight, height_cm, age, gender)
+
+        data = {
+            "age": age,
+            "gender": gender,
+            "height": height_cm,
+            "weight": weight,
+            "bmi": bmi,
+            "bmr": bmr
+        }
+
+        return Response(data, status=200)
+    except Patient.DoesNotExist:
+        return Response({"error": "Patient data not found for this user."}, status=404)
