@@ -86,7 +86,9 @@ const HomeScreen = () => {
                     {/* Greeting */}
                     <View style={styles.greetingContainer}>
                         <Text style={styles.greeting}>Hi, {userName}</Text>
-                        <View style={styles.avatarPlaceholder} />
+                        <TouchableOpacity onPress={() => router.push('/Profile')}>
+                            <Ionicons name="person-circle-outline" size={60} color="#666" style={styles.avatarPlaceholder} />
+                        </TouchableOpacity>
                     </View>
 
                     {/* Sync Score Box */}
@@ -218,7 +220,7 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     avatarPlaceholder: {
-        backgroundColor: '#999',
+        // backgroundColor: '#999',
         width: 60,
         height: 60,
         borderRadius: 30, // Circular avatar
