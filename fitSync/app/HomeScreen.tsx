@@ -218,11 +218,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'relative',
     },
-    metricWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        position: 'relative',
-    },
     metricsContainer: {
         paddingBottom: 15,
     },
