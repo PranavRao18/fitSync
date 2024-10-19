@@ -13,7 +13,7 @@ export default function Index() {
           router.replace('/HomeScreen');
         } else {
           // No token found, navigate to login
-          router.replace('/HomeScreen');
+          router.replace('/SignIn');
         }
       } catch (error) {
         console.error('Error checking auth status:', error);
