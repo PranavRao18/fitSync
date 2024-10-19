@@ -1,0 +1,18 @@
+[
+    {
+        "condition": "Migraine",
+        "confidence_score": 0.7
+    },
+    {
+        "condition": "Tension Headache",
+        "confidence_score": 0.6
+    },
+    {
+        "condition": "Anxiety",
+        "confidence_score": 0.5
+    },
+    {
+        "condition": "Heat Stroke",
+        "confidence_score": 0.4
+    }
+]
