@@ -23,6 +23,17 @@ const HomeScreen = () => {
     const [showLeftArrow, setShowLeftArrow] = useState(false);
     const rightArrowAnim = new Animated.Value(1);
 
+    const handleChatBot = () => {
+        // Add authentication logic here
+        router.push('/Chatbot'); // Navigate to Home screen after sign in
+    };
+
+    const handleMedication = () => {
+        // router.push('/Medications');
+        //When there is some medications already kelgade route, illa andre melgade route
+        router.push('/MyMedications');
+    }
+
     // Pulse animation for right arrow
     useEffect(() => {
         Animated.loop(
@@ -101,6 +112,7 @@ const HomeScreen = () => {
             {/* Dr. Ayu Chatbot Box */}
             <TouchableOpacity
                 style={styles.chatbotBox}
+                onPress={handleChatBot}
             >
                 <ImageBackground
                     source={chatbotImg}
@@ -118,6 +130,7 @@ const HomeScreen = () => {
             {/* Medications Image Background Box */}
             <TouchableOpacity
                 style={styles.chatbotBox}
+                onPress={handleMedication}
             >
                 <ImageBackground
                     source={medicationImg}
