@@ -1,0 +1,81 @@
+[
+{
+    "patient_id": "string",
+    "personal_details": {
+      "first_name": "string",
+      "last_name": "string",
+      "date_of_birth": "YYYY-MM-DD",
+      "gender": "string",
+      "contact_number": "string",
+      "email": "string",
+      "address": {
+        "street": "string",
+        "city": "string",
+        "state": "string",
+        "postal_code": "string",
+        "country": "string"
+      }
+    },
+    "emergency_contacts": [
+      {
+        "name": "string",
+        "relationship": "string",
+        "contact_number": "string"
+      }
+    ],
+    "medications": [
+    {
+      "medication_name": "string",
+      "dosage": "string",
+      "frequency": "string",
+      "start_date": "YYYY-MM-DD",
+      "end_date": "YYYY-MM-DD",
+      "prescribing_doctor": "string",
+      "notes": "string",
+      "reminder":"string",
+        "reminder_time" :"YYYY-MM-DD HH:MM",
+        "before_meal": "boolean"
+    }],
+    "vital_signs": {
+        "blood_pressure": [
+          {
+            "systolic": "number",
+            "diastolic": "number",
+            "measurement_date": "YYYY-MM-DD HH:MM"
+          }
+        ],
+        "heart_rate": [
+          {
+            "bpm": "number",
+            "measurement_date": "YYYY-MM-DD HH:MM"
+          }
+        ],
+        "glucose_levels": [
+          {
+            "glucose": "number",
+            "measurement_date": "YYYY-MM-DD HH:MM",
+            "meal_relation": "before_meal | after_meal"
+          }
+        ],
+        "oxygen_saturation": [
+          {
+            "percentage": "number",
+            "measurement_date": "YYYY-MM-DD HH:MM"
+          }
+        ],
+        "body_temperature": [
+          {
+            "temperature": "number",
+            "measurement_date": "YYYY-MM-DD HH:MM"
+          }
+        ],
+    "weight": [
+      {
+        "value": "number",
+        "measurement_date": "YYYY-MM-DD"
+      }
+    ],
+    "height": "number (cm)"
+  }
+},
+
