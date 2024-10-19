@@ -10,7 +10,7 @@ export default function Index() {
         const token = await AsyncStorage.getItem('access');
         if (token) {
           // Token exists, navigate to dashboard
-          router.replace('/HomeScreen');
+          router.replace('/Chatbot');
         } else {
           // No token found, navigate to login
           router.replace('/SignIn');

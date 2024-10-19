@@ -4,6 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import chatbotImg from '../assets/images/chatbot.png';
 import medicationImg from '../assets/images/medications.png';
+import dietImg from '../assets/images/diet.png';
+import exerciseImg from '../assets/images/exercise.png';
 import { useRouter } from 'expo-router';
 
 // Mock user name and health metrics for demonstration
@@ -51,7 +53,10 @@ const HomeScreen = () => {
     return (
         <ScrollView contentContainerStyle={styles.container} style={{ flex: 1 }}>
             {/* Greeting */}
-            <Text style={styles.greeting}>Hi, {userName}</Text>
+            <View style={styles.greetingContainer}>
+                <Text style={styles.greeting}>Hi, {userName}</Text>
+                <View style={styles.avatarPlaceholder} />
+            </View>
 
             {/* Sync Score Box */}
             <TouchableOpacity style={styles.syncScore}>
@@ -139,8 +144,32 @@ const HomeScreen = () => {
                         View diet tips recommended by Dr. Ayu
                     </Text>
                 </ImageBackground>
+            <TouchableOpacity style={styles.chatbotBox}>
+                <ImageBackground
+                    source={dietImg}
+                    style={styles.chatbotImageBackground}
+                    imageStyle={styles.chatbotImage}
+                >
+                    <View style={styles.overlay} />
+                    <Text style={styles.boxTitle}>Diet Suggestions</Text>
+                    <Text style={styles.boxDescription}>
+                        View diet tips recommended by Dr. Ayu
+                    </Text>
+                </ImageBackground>
             </TouchableOpacity>
 
+            <TouchableOpacity style={styles.chatbotBox}>
+                <ImageBackground
+                    source={exerciseImg}
+                    style={styles.chatbotImageBackground}
+                    imageStyle={styles.chatbotImage}
+                >
+                    <View style={styles.overlay} />
+                    <Text style={styles.boxTitle}>Exercises</Text>
+                    <Text style={styles.boxDescription}>
+                        View exercises recommended by Dr. Ayu
+                    </Text>
+                </ImageBackground>
             <TouchableOpacity style={styles.chatbotBox}>
                 <ImageBackground
                     source={exerciseImg}
@@ -164,11 +193,28 @@ const styles = StyleSheet.create({
         backgroundColor: '#f5f5f5',
         padding: 20,
     },
+    greetingContainer: {
+        paddingTop: 20,
+        paddingBottom: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     greeting: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
-        marginBottom: 20,
+    },
+    avatarPlaceholder: {
+        backgroundColor: '#999',
+        width: 60,
+        height: 60,
+        borderRadius: 30, // Circular avatar
+    },
+    metricWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        position: 'relative',
     },
     metricWrapper: {
         flexDirection: 'row',
