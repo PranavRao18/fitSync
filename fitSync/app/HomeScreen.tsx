@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, ImageBackground } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, ImageBackground, Animated } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import chatbotImg from '../assets/images/chatbot.png';
 import medicationImg from '../assets/images/medications.png';
-import { useRouter, Link } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 // Mock user name and health metrics for demonstration
 const userName = "John Doe"; // Replace with dynamic data if available
@@ -17,6 +17,37 @@ const healthMetrics = [
 
 const HomeScreen = () => {
     const router = useRouter();
+    const [showRightArrow, setShowRightArrow] = useState(true);
+    const [showLeftArrow, setShowLeftArrow] = useState(false);
+    const rightArrowAnim = new Animated.Value(1);
+
+    // Pulse animation for right arrow
+    useEffect(() => {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(rightArrowAnim, {
+                    toValue: 1.2,
+                    duration: 500,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(rightArrowAnim, {
+                    toValue: 1,
+                    duration: 500,
+                    useNativeDriver: true,
+                }),
+            ])
+        ).start();
+    }, []);
+
+    const handleScroll = (event: { nativeEvent: { layoutMeasurement: any; contentOffset: any; contentSize: any; }; }) => {
+        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+        const isEnd = layoutMeasurement.width + contentOffset.x >= contentSize.width - 20;
+        const isStart = contentOffset.x <= 0;
+        
+        setShowRightArrow(!isEnd);
+        setShowLeftArrow(!isStart);
+    };
+
     return (
         <ScrollView contentContainerStyle={styles.container} style={{ flex: 1 }}>
             {/* Greeting */}
@@ -31,25 +62,40 @@ const HomeScreen = () => {
             </TouchableOpacity>
 
             {/* Horizontal Scrollable Health Metrics */}
-            <FlatList
-                data={healthMetrics}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <View style={styles.metricBox}>
-                        <Icon name={item.icon} size={30} color="#fff" />
-                        <Text style={styles.metricValue}>{item.value}</Text>
-                        <Text style={styles.metricTitle}>{item.title}</Text>
-                    </View>
+            <View style={styles.metricWrapper}>
+                <FlatList
+                    data={healthMetrics}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <View style={styles.metricBox}>
+                            <Icon name={item.icon} size={30} color="#fff" />
+                            <Text style={styles.metricValue}>{item.value}</Text>
+                            <Text style={styles.metricTitle}>{item.title}</Text>
+                        </View>
+                    )}
+                    contentContainerStyle={styles.metricsContainer}
+                    onScroll={handleScroll}
+                    scrollEventThrottle={16}
+                />
+                {/* Left Arrow Button */}
+                {showLeftArrow && (
+                    <TouchableOpacity style={styles.leftArrow}>
+                        <Ionicons name="chevron-back-outline" size={24} color="#15b9a6" />
+                    </TouchableOpacity>
                 )}
-                contentContainerStyle={styles.metricsContainer}
-            />
+                {/* Right Arrow Button */}
+                {showRightArrow && (
+                    <Animated.View style={[styles.rightArrow, { transform: [{ scale: rightArrowAnim }] }]}>
+                        <Ionicons name="chevron-forward-outline" size={24} color="#15b9a6" />
+                    </Animated.View>
+                )}
+            </View>
 
             {/* Dr. Ayu Chatbot Box */}
             <TouchableOpacity
                 style={styles.chatbotBox}
-                // onPress={() => router.navigate('/Chatbot')}
             >
                 <ImageBackground
                     source={chatbotImg}
@@ -67,7 +113,6 @@ const HomeScreen = () => {
             {/* Medications Image Background Box */}
             <TouchableOpacity
                 style={styles.chatbotBox}
-                // onPress={() => navigation.navigate('Medications')}
             >
                 <ImageBackground
                     source={medicationImg}
@@ -82,33 +127,32 @@ const HomeScreen = () => {
                 </ImageBackground>
             </TouchableOpacity>
 
-            {/* Medications Box */}
-            <TouchableOpacity
-                style={styles.medicationBox}
-                // onPress={() => navigation.navigate('Medications')}
-            >
-                <Icon name="pill" size={24} color="#fff" />
-                <Text style={styles.boxTitle}>Medications</Text>
-                <Text style={styles.boxDescription}>
-                    View and manage your medications.
-                </Text>
+            <TouchableOpacity style={styles.chatbotBox}>
+                <ImageBackground
+                    source={dietImg}
+                    style={styles.chatbotImageBackground}
+                    imageStyle={styles.chatbotImage}
+                >
+                    <View style={styles.overlay} />
+                    <Text style={styles.boxTitle}>Diet Suggestions</Text>
+                    <Text style={styles.boxDescription}>
+                        View diet tips recommended by Dr. Ayu
+                    </Text>
+                </ImageBackground>
             </TouchableOpacity>
 
-            {/* Additional Boxes */}
-            <TouchableOpacity style={styles.medicationBox}>
-                <Icon name="food-apple" size={24} color="#fff" />
-                <Text style={styles.boxTitle}>Diet Suggestions</Text>
-                <Text style={styles.boxDescription}>
-                    View diet tips recommended by Dr. Ayu
-                </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.medicationBox}>
-                <Icon name="run" size={24} color="#fff" />
-                <Text style={styles.boxTitle}>Exercises</Text>
-                <Text style={styles.boxDescription}>
-                    View exercises recommended by Dr. Ayu
-                </Text>
+            <TouchableOpacity style={styles.chatbotBox}>
+                <ImageBackground
+                    source={exerciseImg}
+                    style={styles.chatbotImageBackground}
+                    imageStyle={styles.chatbotImage}
+                >
+                    <View style={styles.overlay} />
+                    <Text style={styles.boxTitle}>Exercises</Text>
+                    <Text style={styles.boxDescription}>
+                        View exercises recommended by Dr. Ayu
+                    </Text>
+                </ImageBackground>
             </TouchableOpacity>
         </ScrollView>
     );
@@ -116,7 +160,7 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flexGrow: 1, // Ensure content can grow and be scrollable
+        flexGrow: 1,
         backgroundColor: '#f5f5f5',
         padding: 20,
     },
@@ -126,8 +170,12 @@ const styles = StyleSheet.create({
         color: '#333',
         marginBottom: 20,
     },
+    metricWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        position: 'relative',
+    },
     metricsContainer: {
-        height: 170,
         paddingBottom: 15,
     },
     metricBox: {
@@ -157,30 +205,21 @@ const styles = StyleSheet.create({
         color: '#fff',
         marginTop: 5,
     },
-    chatbotBox: {
-        borderRadius: 10,
-        marginBottom: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
-        elevation: 3,
-    },
-    chatbotImageBackground: {
-        width: '100%',
-        height: 150,
+    rightArrow: {
+        position: 'absolute',
+        right: -10,
+        top: 60,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10,
-        overflow: 'hidden',
+        zIndex: 10,
     },
-    chatbotImage: {
-        borderRadius: 10,
-        opacity: 0.8, // Darken for text readability
-    },
-    overlay: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Enhance text visibility
+    leftArrow: {
+        position: 'absolute',
+        left: -10,
+        top: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 10,
     },
     syncScore: {
         backgroundColor: '#15b9a6',
@@ -205,17 +244,30 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#fff'
     },
-    medicationBox: {
-        backgroundColor: '#15b9a6',
+    chatbotBox: {
         borderRadius: 10,
-        padding: 20,
+        marginBottom: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 5,
         elevation: 3,
-        marginBottom: 10,
+    },
+    chatbotImageBackground: {
+        width: '100%',
+        height: 150,
+        justifyContent: 'center',
         alignItems: 'center',
+        borderRadius: 10,
+        overflow: 'hidden',
+    },
+    chatbotImage: {
+        borderRadius: 10,
+        opacity: 0.8,
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     boxTitle: {
         fontSize: 20,
