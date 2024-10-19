@@ -144,6 +144,7 @@ const HomeScreen = () => {
                         View diet tips recommended by Dr. Ayu
                     </Text>
                 </ImageBackground>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.chatbotBox}>
                 <ImageBackground
                     source={dietImg}
@@ -170,6 +171,7 @@ const HomeScreen = () => {
                         View exercises recommended by Dr. Ayu
                     </Text>
                 </ImageBackground>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.chatbotBox}>
                 <ImageBackground
                     source={exerciseImg}
