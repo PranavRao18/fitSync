@@ -87,13 +87,13 @@ const HomeScreen = () => {
                 {/* Left Arrow Button */}
                 {showLeftArrow && (
                     <TouchableOpacity style={styles.leftArrow}>
-                        <Ionicons name="chevron-back-outline" size={24} color="#15b9a6" />
+                        <Ionicons name="chevron-back-outline" size={24} color="#808080" />
                     </TouchableOpacity>
                 )}
                 {/* Right Arrow Button */}
                 {showRightArrow && (
                     <Animated.View style={[styles.rightArrow, { transform: [{ scale: rightArrowAnim }] }]}>
-                        <Ionicons name="chevron-forward-outline" size={24} color="#15b9a6" />
+                        <Ionicons name="chevron-forward-outline" size={24} color="#808080" />
                     </Animated.View>
                 )}
             </View>
@@ -145,33 +145,7 @@ const HomeScreen = () => {
                     </Text>
                 </ImageBackground>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.chatbotBox}>
-                <ImageBackground
-                    source={dietImg}
-                    style={styles.chatbotImageBackground}
-                    imageStyle={styles.chatbotImage}
-                >
-                    <View style={styles.overlay} />
-                    <Text style={styles.boxTitle}>Diet Suggestions</Text>
-                    <Text style={styles.boxDescription}>
-                        View diet tips recommended by Dr. Ayu
-                    </Text>
-                </ImageBackground>
-            </TouchableOpacity>
 
-            <TouchableOpacity style={styles.chatbotBox}>
-                <ImageBackground
-                    source={exerciseImg}
-                    style={styles.chatbotImageBackground}
-                    imageStyle={styles.chatbotImage}
-                >
-                    <View style={styles.overlay} />
-                    <Text style={styles.boxTitle}>Exercises</Text>
-                    <Text style={styles.boxDescription}>
-                        View exercises recommended by Dr. Ayu
-                    </Text>
-                </ImageBackground>
-            </TouchableOpacity>
             <TouchableOpacity style={styles.chatbotBox}>
                 <ImageBackground
                     source={exerciseImg}
