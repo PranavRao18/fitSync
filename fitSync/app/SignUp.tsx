@@ -1,28 +1,85 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
+import { useRouter } from 'expo-router';
 
 const SignUpScreen = () => {
+    const [fname, setFName] = useState('');
+    const [lname, setLName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [contactNumber, setContactNumber] = useState('');
 
-    const handleSignUp = () => {
+    const router = useRouter();
+
+    const handleSignUp = async () => {
         // Check if passwords match
         if (password !== confirmPassword) {
             Alert.alert('Error', 'Passwords do not match. Please try again.');
             return;
         }
 
-        // Add further sign-up logic here, e.g., call an API
-        router.push('/SignIn'); // Navigate to SignIn screen after successful sign-up
+        // Prepare the payload
+        const payload = {
+            first_name: fname,
+            last_name: lname,
+            email: email,
+            password: password,
+            contact_number: contactNumber,
+        };
+
+        try {
+            // Send data to the backend using axios
+            const response = await axios.post('https://your-backend-url/api/register', payload);
+            
+            if (response.status === 200) {
+                Alert.alert('Success', 'Account created successfully!');
+                // Navigate to the SignIn screen after successful sign-up
+                router.push('/AdditionalSignup');
+            } else {
+                Alert.alert('Error', 'Something went wrong. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error during sign-up:', error);
+            Alert.alert('Error', 'Failed to create account. Please try again.');
+        }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Sign Up</Text>
+            <Text style={styles.title}>Welcome to fitSync</Text>
 
+            {/* First Name */}
+            <View style={styles.labelContainer}>
+                <Text style={styles.label}>First Name</Text>
+            </View>
+            <View style={styles.inputContainer}>
+                <Ionicons name="person-outline" size={20} color="#666" style={styles.icon} />
+                <TextInput
+                    placeholder="Enter First Name"
+                    style={styles.input}
+                    value={fname}
+                    onChangeText={setFName}
+                />
+            </View>
+
+            {/* Last Name */}
+            <View style={styles.labelContainer}>
+                <Text style={styles.label}>Last Name</Text>
+            </View>
+            <View style={styles.inputContainer}>
+                <Ionicons name="person-outline" size={20} color="#666" style={styles.icon} />
+                <TextInput
+                    placeholder="Enter Last Name"
+                    style={styles.input}
+                    value={lname}
+                    onChangeText={setLName}
+                />
+            </View>
+
+            {/* Email */}
             <View style={styles.labelContainer}>
                 <Text style={styles.label}>Email Address</Text>
             </View>
@@ -38,6 +95,22 @@ const SignUpScreen = () => {
                 />
             </View>
 
+            {/* Contact Number */}
+            <View style={styles.labelContainer}>
+                <Text style={styles.label}>Contact Number</Text>
+            </View>
+            <View style={styles.inputContainer}>
+                <Ionicons name="call-outline" size={20} color="#666" style={styles.icon} />
+                <TextInput
+                    placeholder="Contact Number"
+                    style={styles.input}
+                    value={contactNumber}
+                    onChangeText={setContactNumber}
+                    keyboardType="phone-pad"
+                />
+            </View>
+
+            {/* Password */}
             <View style={styles.labelContainer}>
                 <Text style={styles.label}>Password</Text>
             </View>
@@ -52,6 +125,7 @@ const SignUpScreen = () => {
                 />
             </View>
 
+            {/* Confirm Password */}
             <View style={styles.labelContainer}>
                 <Text style={styles.label}>Confirm Password</Text>
             </View>
@@ -90,7 +164,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 30,
-        fontWeight: '600',
+        fontWeight: 'bold',
         color: '#333',
         marginBottom: 30,
         textAlign: 'center',
@@ -109,10 +183,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
-        borderWidth: 1,
+        // borderWidth: 1,
         borderColor: '#ddd',
         backgroundColor: '#fff',
-        paddingVertical: 8,
+        paddingVertical: 13,
         paddingHorizontal: 10,
         marginBottom: 15,
         borderRadius: 8,
