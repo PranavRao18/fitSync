@@ -13,7 +13,7 @@ export default function Index() {
           router.replace('/Chatbot');
         } else {
           // No token found, navigate to login
-          router.replace('/SignIn');
+          router.replace('/HealthMetric');
         }
       } catch (error) {
         console.error('Error checking auth status:', error);

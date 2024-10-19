@@ -6,7 +6,7 @@ import chatbotImg from '../assets/images/chatbot.png';
 import medicationImg from '../assets/images/medications.png';
 import dietImg from '../assets/images/diet.png';
 import exerciseImg from '../assets/images/exercise.png';
-import { useRouter } from 'expo-router';
+import HealthMetricScreen from './HealthMetric';
 
 // Mock user name and health metrics for demonstration
 const userName = "John Doe"; // Replace with dynamic data if available
@@ -18,7 +18,7 @@ const healthMetrics = [
 ];
 
 const HomeScreen = () => {
-    const router = useRouter();
+    const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
     const [showRightArrow, setShowRightArrow] = useState(true);
     const [showLeftArrow, setShowLeftArrow] = useState(false);
     const rightArrowAnim = new Animated.Value(1);
@@ -50,142 +50,132 @@ const HomeScreen = () => {
         setShowLeftArrow(!isStart);
     };
 
+    const handleMetricPress = (title: string) => {
+        setSelectedMetric(title);
+    };
+
+    const handleBackToMetrics = () => {
+        setSelectedMetric(null);
+    };
+
     return (
-        <ScrollView contentContainerStyle={styles.container} style={{ flex: 1 }}>
-            {/* Greeting */}
-            <View style={styles.greetingContainer}>
-                <Text style={styles.greeting}>Hi, {userName}</Text>
-                <View style={styles.avatarPlaceholder} />
-            </View>
-
-            {/* Sync Score Box */}
-            <TouchableOpacity style={styles.syncScore}>
-                <Text style={styles.syncTitle}>80.2</Text>
-                <Text style={styles.syncDescription}>
-                    You are fit and healthy, keep going!
-                </Text>
-            </TouchableOpacity>
-
-            {/* Horizontal Scrollable Health Metrics */}
-            <View style={styles.metricWrapper}>
-                <FlatList
-                    data={healthMetrics}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                        <View style={styles.metricBox}>
-                            <Icon name={item.icon} size={30} color="#fff" />
-                            <Text style={styles.metricValue}>{item.value}</Text>
-                            <Text style={styles.metricTitle}>{item.title}</Text>
-                        </View>
-                    )}
-                    contentContainerStyle={styles.metricsContainer}
-                    onScroll={handleScroll}
-                    scrollEventThrottle={16}
-                />
-                {/* Left Arrow Button */}
-                {showLeftArrow && (
-                    <TouchableOpacity style={styles.leftArrow}>
-                        <Ionicons name="chevron-back-outline" size={24} color="#15b9a6" />
+        <View style={{ flex: 1 }}>
+            {selectedMetric ? (
+                <View style={{ flex: 1 }}>
+                    <TouchableOpacity onPress={handleBackToMetrics} style={styles.backButton}>
+                        <Ionicons name="arrow-back" size={24} color="#15b9a6" />
+                        <Text style={styles.backButtonText}>Back</Text>
                     </TouchableOpacity>
-                )}
-                {/* Right Arrow Button */}
-                {showRightArrow && (
-                    <Animated.View style={[styles.rightArrow, { transform: [{ scale: rightArrowAnim }] }]}>
-                        <Ionicons name="chevron-forward-outline" size={24} color="#15b9a6" />
-                    </Animated.View>
-                )}
-            </View>
+                    <HealthMetricScreen metricName={selectedMetric} />
+                </View>
+            ) : (
+                <ScrollView contentContainerStyle={styles.container} style={{ flex: 1 }}>
+                    {/* Greeting */}
+                    <View style={styles.greetingContainer}>
+                        <Text style={styles.greeting}>Hi, {userName}</Text>
+                        <View style={styles.avatarPlaceholder} />
+                    </View>
 
-            {/* Dr. Ayu Chatbot Box */}
-            <TouchableOpacity
-                style={styles.chatbotBox}
-            >
-                <ImageBackground
-                    source={chatbotImg}
-                    style={styles.chatbotImageBackground}
-                    imageStyle={styles.chatbotImage}
-                >
-                    <View style={styles.overlay} />
-                    <Text style={styles.boxTitle}>Talk to Dr. Ayu</Text>
-                    <Text style={styles.boxDescription}>
-                        Click here to chat with Dr. Ayu, your health assistant.
-                    </Text>
-                </ImageBackground>
-            </TouchableOpacity>
+                    {/* Sync Score Box */}
+                    <TouchableOpacity style={styles.syncScore}>
+                        <Text style={styles.syncTitle}>80.2</Text>
+                        <Text style={styles.syncDescription}>
+                            You are fit and healthy, keep going!
+                        </Text>
+                    </TouchableOpacity>
 
-            {/* Medications Image Background Box */}
-            <TouchableOpacity
-                style={styles.chatbotBox}
-            >
-                <ImageBackground
-                    source={medicationImg}
-                    style={styles.chatbotImageBackground}
-                    imageStyle={styles.chatbotImage}
-                >
-                    <View style={styles.overlay} />
-                    <Text style={styles.boxTitle}>Medications</Text>
-                    <Text style={styles.boxDescription}>
-                        View and manage your medications.
-                    </Text>
-                </ImageBackground>
-            </TouchableOpacity>
+                    {/* Horizontal Scrollable Health Metrics */}
+                    <View style={styles.metricWrapper}>
+                        <FlatList
+                            data={healthMetrics}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity style={styles.metricBox} onPress={() => handleMetricPress(item.title)}>
+                                    <Icon name={item.icon} size={30} color="#fff" />
+                                    <Text style={styles.metricValue}>{item.value}</Text>
+                                    <Text style={styles.metricTitle}>{item.title}</Text>
+                                </TouchableOpacity>
+                            )}
+                            contentContainerStyle={styles.metricsContainer}
+                            onScroll={handleScroll}
+                            scrollEventThrottle={16}
+                        />
+                        {/* Left Arrow Button */}
+                        {showLeftArrow && (
+                            <TouchableOpacity style={styles.leftArrow}>
+                                <Ionicons name="chevron-back-outline" size={24} color="#15b9a6" />
+                            </TouchableOpacity>
+                        )}
+                        {/* Right Arrow Button */}
+                        {showRightArrow && (
+                            <Animated.View style={[styles.rightArrow, { transform: [{ scale: rightArrowAnim }] }]}>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#15b9a6" />
+                            </Animated.View>
+                        )}
+                    </View>
 
-            <TouchableOpacity style={styles.chatbotBox}>
-                <ImageBackground
-                    source={dietImg}
-                    style={styles.chatbotImageBackground}
-                    imageStyle={styles.chatbotImage}
-                >
-                    <View style={styles.overlay} />
-                    <Text style={styles.boxTitle}>Diet Suggestions</Text>
-                    <Text style={styles.boxDescription}>
-                        View diet tips recommended by Dr. Ayu
-                    </Text>
-                </ImageBackground>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.chatbotBox}>
-                <ImageBackground
-                    source={dietImg}
-                    style={styles.chatbotImageBackground}
-                    imageStyle={styles.chatbotImage}
-                >
-                    <View style={styles.overlay} />
-                    <Text style={styles.boxTitle}>Diet Suggestions</Text>
-                    <Text style={styles.boxDescription}>
-                        View diet tips recommended by Dr. Ayu
-                    </Text>
-                </ImageBackground>
-            </TouchableOpacity>
+                    {/* Dr. Ayu Chatbot Box */}
+                    <TouchableOpacity style={styles.chatbotBox}>
+                        <ImageBackground
+                            source={chatbotImg}
+                            style={styles.chatbotImageBackground}
+                            imageStyle={styles.chatbotImage}
+                        >
+                            <View style={styles.overlay} />
+                            <Text style={styles.boxTitle}>Talk to Dr. Ayu</Text>
+                            <Text style={styles.boxDescription}>
+                                Click here to chat with Dr. Ayu, your health assistant.
+                            </Text>
+                        </ImageBackground>
+                    </TouchableOpacity>
 
-            <TouchableOpacity style={styles.chatbotBox}>
-                <ImageBackground
-                    source={exerciseImg}
-                    style={styles.chatbotImageBackground}
-                    imageStyle={styles.chatbotImage}
-                >
-                    <View style={styles.overlay} />
-                    <Text style={styles.boxTitle}>Exercises</Text>
-                    <Text style={styles.boxDescription}>
-                        View exercises recommended by Dr. Ayu
-                    </Text>
-                </ImageBackground>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.chatbotBox}>
-                <ImageBackground
-                    source={exerciseImg}
-                    style={styles.chatbotImageBackground}
-                    imageStyle={styles.chatbotImage}
-                >
-                    <View style={styles.overlay} />
-                    <Text style={styles.boxTitle}>Exercises</Text>
-                    <Text style={styles.boxDescription}>
-                        View exercises recommended by Dr. Ayu
-                    </Text>
-                </ImageBackground>
-            </TouchableOpacity>
-        </ScrollView>
+                    {/* Medications Image Background Box */}
+                    <TouchableOpacity style={styles.chatbotBox}>
+                        <ImageBackground
+                            source={medicationImg}
+                            style={styles.chatbotImageBackground}
+                            imageStyle={styles.chatbotImage}
+                        >
+                            <View style={styles.overlay} />
+                            <Text style={styles.boxTitle}>Medications</Text>
+                            <Text style={styles.boxDescription}>
+                                View and manage your medications.
+                            </Text>
+                        </ImageBackground>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.chatbotBox}>
+                        <ImageBackground
+                            source={dietImg}
+                            style={styles.chatbotImageBackground}
+                            imageStyle={styles.chatbotImage}
+                        >
+                            <View style={styles.overlay} />
+                            <Text style={styles.boxTitle}>Diet Suggestions</Text>
+                            <Text style={styles.boxDescription}>
+                                View diet tips recommended by Dr. Ayu
+                            </Text>
+                        </ImageBackground>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.chatbotBox}>
+                        <ImageBackground
+                            source={exerciseImg}
+                            style={styles.chatbotImageBackground}
+                            imageStyle={styles.chatbotImage}
+                        >
+                            <View style={styles.overlay} />
+                            <Text style={styles.boxTitle}>Exercises</Text>
+                            <Text style={styles.boxDescription}>
+                                View exercises recommended by Dr. Ayu
+                            </Text>
+                        </ImageBackground>
+                    </TouchableOpacity>
+                </ScrollView>
+            )}
+        </View>
     );
 };
 
@@ -323,6 +313,17 @@ const styles = StyleSheet.create({
         color: '#eee',
         marginTop: 5,
         textAlign: 'center',
+    },
+    backButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        backgroundColor: '#f5f5f5',
+    },
+    backButtonText: {
+        fontSize: 18,
+        color: '#15b9a6',
+        marginLeft: 5,
     },
 });
 
