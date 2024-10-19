@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, ImageBackground } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import chatbotImg from '../assets/images/chatbot.png';
 import medicationImg from '../assets/images/medications.png';
-import { useRouter, Link } from 'expo-router';
+import dietImg from '../assets/images/diet.png';
+import exerciseImg from '../assets/images/exercise.png';
 
 // Mock user name and health metrics for demonstration
 const userName = "John Doe"; // Replace with dynamic data if available
@@ -16,11 +16,13 @@ const healthMetrics = [
 ];
 
 const HomeScreen = () => {
-    const router = useRouter();
     return (
         <ScrollView contentContainerStyle={styles.container} style={{ flex: 1 }}>
             {/* Greeting */}
-            <Text style={styles.greeting}>Hi, {userName}</Text>
+            <View style={styles.greetingContainer}>
+                <Text style={styles.greeting}>Hi, {userName}</Text>
+                <View style={styles.avatarPlaceholder} />
+            </View>
 
             {/* Sync Score Box */}
             <TouchableOpacity style={styles.syncScore}>
@@ -47,10 +49,7 @@ const HomeScreen = () => {
             />
 
             {/* Dr. Ayu Chatbot Box */}
-            <TouchableOpacity
-                style={styles.chatbotBox}
-                // onPress={() => router.navigate('/Chatbot')}
-            >
+            <TouchableOpacity style={styles.chatbotBox}>
                 <ImageBackground
                     source={chatbotImg}
                     style={styles.chatbotImageBackground}
@@ -65,10 +64,7 @@ const HomeScreen = () => {
             </TouchableOpacity>
 
             {/* Medications Image Background Box */}
-            <TouchableOpacity
-                style={styles.chatbotBox}
-                // onPress={() => navigation.navigate('Medications')}
-            >
+            <TouchableOpacity style={styles.chatbotBox}>
                 <ImageBackground
                     source={medicationImg}
                     style={styles.chatbotImageBackground}
@@ -82,33 +78,32 @@ const HomeScreen = () => {
                 </ImageBackground>
             </TouchableOpacity>
 
-            {/* Medications Box */}
-            <TouchableOpacity
-                style={styles.medicationBox}
-                // onPress={() => navigation.navigate('Medications')}
-            >
-                <Icon name="pill" size={24} color="#fff" />
-                <Text style={styles.boxTitle}>Medications</Text>
-                <Text style={styles.boxDescription}>
-                    View and manage your medications.
-                </Text>
+            <TouchableOpacity style={styles.chatbotBox}>
+                <ImageBackground
+                    source={dietImg}
+                    style={styles.chatbotImageBackground}
+                    imageStyle={styles.chatbotImage}
+                >
+                    <View style={styles.overlay} />
+                    <Text style={styles.boxTitle}>Diet Suggestions</Text>
+                    <Text style={styles.boxDescription}>
+                        View diet tips recommended by Dr. Ayu
+                    </Text>
+                </ImageBackground>
             </TouchableOpacity>
 
-            {/* Additional Boxes */}
-            <TouchableOpacity style={styles.medicationBox}>
-                <Icon name="food-apple" size={24} color="#fff" />
-                <Text style={styles.boxTitle}>Diet Suggestions</Text>
-                <Text style={styles.boxDescription}>
-                    View diet tips recommended by Dr. Ayu
-                </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.medicationBox}>
-                <Icon name="run" size={24} color="#fff" />
-                <Text style={styles.boxTitle}>Exercises</Text>
-                <Text style={styles.boxDescription}>
-                    View exercises recommended by Dr. Ayu
-                </Text>
+            <TouchableOpacity style={styles.chatbotBox}>
+                <ImageBackground
+                    source={exerciseImg}
+                    style={styles.chatbotImageBackground}
+                    imageStyle={styles.chatbotImage}
+                >
+                    <View style={styles.overlay} />
+                    <Text style={styles.boxTitle}>Exercises</Text>
+                    <Text style={styles.boxDescription}>
+                        View exercises recommended by Dr. Ayu
+                    </Text>
+                </ImageBackground>
             </TouchableOpacity>
         </ScrollView>
     );
@@ -120,11 +115,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#f5f5f5',
         padding: 20,
     },
+    greetingContainer: {
+        paddingTop: 20,
+        paddingBottom: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     greeting: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
-        marginBottom: 20,
+    },
+    avatarPlaceholder: {
+        backgroundColor: '#999',
+        width: 60,
+        height: 60,
+        borderRadius: 30, // Circular avatar
     },
     metricsContainer: {
         height: 170,
@@ -204,18 +211,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         color: '#fff'
-    },
-    medicationBox: {
-        backgroundColor: '#15b9a6',
-        borderRadius: 10,
-        padding: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
-        elevation: 3,
-        marginBottom: 10,
-        alignItems: 'center',
     },
     boxTitle: {
         fontSize: 20,
