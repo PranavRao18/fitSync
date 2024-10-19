@@ -1,15 +1,12 @@
-import { Text, View } from "react-native";
+// index.tsx
 
-export default function Index() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
-  );
-}
+import 'react-native-gesture-handler'; // Ensure this is at the top
+import React from 'react';
+import { registerRootComponent } from 'expo';
+import AppNavigator from '../components/navigation/AppNavigator';
+
+const App = () => {
+    return <AppNavigator />;
+};
+
+registerRootComponent(App);
