@@ -36,6 +36,10 @@ const HomeScreen = () => {
         // router.push('/MyMedications');
     }
 
+    const handleDiet = () => {
+        router.push('/Diet');
+    }
+
     // Pulse animation for right arrow
     useEffect(() => {
         Animated.loop(
@@ -165,7 +169,8 @@ const HomeScreen = () => {
                 </ImageBackground>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.chatbotBox}>
+            <TouchableOpacity style={styles.chatbotBox}
+            onPress={handleDiet}>
                 <ImageBackground
                     source={dietImg}
                     style={styles.chatbotImageBackground}
