@@ -5,6 +5,15 @@ import { useRouter } from 'expo-router';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+interface Dish {
+    dishname: string;
+    cuisine: string;
+    type: string;
+    calories: number;
+    proteins: number;
+    fats: number;
+}
+
 const DietSuggestionsScreen = () => {
     const router = useRouter();
     const [userData, setUserData] = useState({
@@ -17,27 +26,26 @@ const DietSuggestionsScreen = () => {
         activityLevel: '',
     });
     const [loading, setLoading] = useState(false);
-    const [dietPlan, setDietPlan] = useState<string | null>(null);
-    const token = AsyncStorage.getItem('access_token');
+    const [dietDishes, setDietDishes] = useState<Dish[]>([]);
 
-    // Fetch User Data from Database (Mock Function)
     const fetchUserData = async () => {
         try {
-            const token =await AsyncStorage.getItem('access_token');
-            // Assume fetching from backend or database
-            console.log(token)
+            const token = await AsyncStorage.getItem('access_token');
+            if (!token) {
+                Alert.alert("Error", "User is not authenticated. Please log in again.");
+                return;
+            }
             const response = await axios.get(
                 "https://2762-2409-40f2-146-a541-e837-d35c-92f3-42d7.ngrok-free.app/api/get_diet/",
                 {
                     headers: {
-                        'Authorization': `Bearer ${token}`, // Include the Bearer token
-                        'Content-Type': 'application/json', // Set Content-Type if needed
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
                     },
                 }
             );
             const data = response.data;
 
-            // Map response data to state, using defaults for null values
             setUserData({
                 age: data.age || 0,
                 weight: data.weight !== null ? data.weight : 0,
@@ -49,6 +57,7 @@ const DietSuggestionsScreen = () => {
             });
         } catch (error) {
             console.error("Failed to fetch user data", error);
+            Alert.alert("Error", "Unable to fetch user data. Please check your network or try again later.");
         }
     };
 
@@ -69,29 +78,16 @@ const DietSuggestionsScreen = () => {
                     },
                 }
             );
-            console.log(response.data);
+            const data = response.data;
+            console.log(JSON.parse(data));
+            setDietDishes(JSON.parse(data) || []); // Ensure `dietDishes` is always an array
         } catch (error) {
-            // Extract error message
             const errorMessage = error.response?.data?.message || error.message || "An unknown error occurred";
             console.error(error);
-            Alert.alert("Error", errorMessage); // Show the error in an alert
+            Alert.alert("Error", errorMessage);
         } finally {
             setLoading(false);
         }
-    };
-    
-    
-
-    // Placeholder function for predicting calorie intake using the model
-    const predictCalorieIntake = async (data: any) => {
-        // Your model logic here
-        return 2000; // Placeholder
-    };
-
-    // Placeholder function for fetching diet plan from LLM
-    const fetchDietPlanFromLLM = async (calories: number) => {
-        // Your LLM integration logic here
-        return `Based on a daily calorie intake of ${calories} kcal, we suggest a balanced diet rich in proteins, vegetables, and healthy fats. Include lean meats, fish, nuts, seeds, and leafy greens in your meals.`;
     };
 
     return (
@@ -126,10 +122,21 @@ const DietSuggestionsScreen = () => {
                 )}
             </TouchableOpacity>
 
-            {/* Display Diet Plan */}
-            {dietPlan && (
-                <View style={styles.dietPlanContainer}>
-                    <Text style={styles.dietPlanText}>{dietPlan}</Text>
+            {/* Display Diet Dishes in Cards */}
+            {dietDishes.length > 0 && (
+                <View style={styles.dishesContainer}>
+                    <Text style={styles.dishesTitle}>Recommended Dishes:</Text>
+                    {dietDishes.map((dish, index) => (
+                        <View key={index} style={styles.dishCard}>
+                            <View style={styles.dishInfo}>
+                                <Text style={styles.dishName}>{dish.dishname}</Text>
+                                <Text style={styles.dishDetails}>{dish.cuisine} • {dish.type}</Text>
+                                <Text style={styles.dishNutritional}>
+                                    Calories: {dish.calories} kcal • Proteins: {dish.proteins}g • Fats: {dish.fats}g
+                                </Text>
+                            </View>
+                        </View>
+                    ))}
                 </View>
             )}
         </ScrollView>
@@ -183,7 +190,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginRight: 10,
     },
-    dietPlanContainer: {
+    dishesContainer: {
         backgroundColor: '#fff',
         borderRadius: 10,
         padding: 20,
@@ -192,13 +199,44 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 5,
         elevation: 3,
+        marginTop: 20,
     },
-    dietPlanText: {
-        fontSize: 16,
+    dishesTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
         color: '#333',
-        lineHeight: 22,
+        marginBottom: 15,
+    },
+    dishCard: {
+        backgroundColor: '#f0f0f0',
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    dishInfo: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+    },
+    dishName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 5,
+    },
+    dishDetails: {
+        fontSize: 14,
+        color: '#777',
+    },
+    dishNutritional: {
+        fontSize: 14,
+        color: '#555',
+        marginTop: 5,
     },
 });
 
 export default DietSuggestionsScreen;
- 
