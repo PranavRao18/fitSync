@@ -44,3 +44,21 @@ try:
     
 except Exception as e:
     print(f"An error occurred: {e}")
+
+import joblib
+
+# Load the uploaded Random Forest model for calorie prediction
+model_path = "fitSync\Models\calories_prediction_model.pkl"
+import numpy as np
+
+model = joblib.load(model_path)
+
+# Define input data (example)
+# Make sure the input follows the order of the features used during model training
+input_data = np.array([[25, 70, 1.75, 1, 22.9, 1650, 3]])  # Example: [age, weight(kg), height(m), gender (1 for male, 0 for female), BMI, BMR, activity_level]
+
+# Make prediction
+predicted_calories = model.predict(input_data)
+
+print(f"Predicted daily calorie intake: {predicted_calories[0]}")
+calories_model = joblib.load(model_path)
