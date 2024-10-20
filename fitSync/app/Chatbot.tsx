@@ -5,19 +5,13 @@ import { Dialogflow_V2 } from 'react-native-dialogflow';
 import { dialogflowConfig } from './dialogFlowConfig';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import chabotImg from '../assets/images/chatbot.png';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatScreen = () => {
     const [messages, setMessages] = useState<IMessage[]>([]);
 
     useEffect(() => {
-        // Initialize Dialogflow with the correct configuration
-        Dialogflow_V2.setConfiguration(
-            dialogflowConfig.client_email,
-            dialogflowConfig.private_key.replace(/\\n/g, '\n'), // Replace newlines
-            Dialogflow_V2.LANG_ENGLISH_US,
-            dialogflowConfig.project_id
-        );
-
         // Initial welcome message
         setMessages([
             {
@@ -32,52 +26,41 @@ const ChatScreen = () => {
             },
         ]);
     }, []);
+    
 
-    const onSend = (newMessages: IMessage[] = []) => {
+    const onSend = async (newMessages: IMessage[] = []) => {
         setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages));
-
+    
         const userMessage = newMessages[0].text;
         const sessionId = 'unique-session-id'; // Use a unique session ID
+        const token = await AsyncStorage.getItem('access_token');
 
-        // Use CORS proxy
-        const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-        const DIALOGFLOW_ENDPOINT = `https://dialogflow.googleapis.com/v2/projects/${dialogflowConfig.project_id}/agent/sessions/${sessionId}:detectIntent`;
-
-        const requestBody = {
-            queryInput: {
-                text: {
-                    text: userMessage,
-                    languageCode: 'en-US',
+        try {
+            const response = await axios.post("https://2762-2409-40f2-146-a541-e837-d35c-92f3-42d7.ngrok-free.app/api/chat/", {
+                sessionId,
+                message: userMessage,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // Add token if needed
                 },
-            },
-        };
-
-        fetch(CORS_PROXY + DIALOGFLOW_ENDPOINT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${dialogflowConfig.token_uri}`, // If you're using OAuth2 token
-            },
-            body: JSON.stringify(requestBody),
-        })
-            .then(response => response.json())
-            .then(data => {
-                const chatbotResponse = data.queryResult?.fulfillmentText || "I didn't quite get that.";
-                const botMessage: IMessage = {
-                    _id: Math.random().toString(36).substring(7),
-                    text: chatbotResponse,
-                    createdAt: new Date(),
-                    user: {
-                        _id: 2,
-                        name: 'Chatbot',
-                        avatar: chabotImg,
-                    },
-                };
-                setMessages(previousMessages => GiftedChat.append(previousMessages, [botMessage]));
-            })
-            .catch(error => {
-                console.error('Error:', error);
             });
+    
+            const chatbotResponse = response.data || "I didn't quite get that.";
+            const botMessage: IMessage = {
+                _id: Math.random().toString(36).substring(7),
+                text: chatbotResponse,
+                createdAt: new Date(),
+                user: {
+                    _id: 2,
+                    name: 'Chatbot',
+                    avatar: chabotImg,
+                },
+            };
+            setMessages(previousMessages => GiftedChat.append(previousMessages, [botMessage]));
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     const renderBubble = (props: any) => {

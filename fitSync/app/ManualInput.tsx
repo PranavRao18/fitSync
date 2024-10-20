@@ -22,7 +22,7 @@ const ManuallyInputMedication = () => {
     const router = useRouter();
 
     const handleSave = () => {
-        // Save the medication information to your database or backend
+        
     };
 
     const handleDateChange = (event: DateTimePickerEvent, selectedDate: Date | undefined, type: string) => {

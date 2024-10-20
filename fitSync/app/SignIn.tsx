@@ -8,23 +8,29 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const API_URL = 'http://127.0.0.1:8000/api/token/'; // Replace with your actual backend URL
 
 const SignInScreen = () => {
-    const [email, setEmail] = useState('');
+    const [username, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSignIn = async () => {
         try {
-            const response = await axios.post(API_URL, {
-                email,
-                password,
-            });
-
+            const response = await axios.post(
+                'http://2762-2409-40f2-146-a541-e837-d35c-92f3-42d7.ngrok-free.app/api/token/',  // Update to correct API URL
+                {
+                    username,
+                    password,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+    
             const { access, refresh } = response.data;
-
-            // Store the tokens in AsyncStorage
+    
             await AsyncStorage.setItem('access_token', access);
             await AsyncStorage.setItem('refresh_token', refresh);
-
-            // Navigate to the Home screen
+    
             router.push('/HomeScreen');
         } catch (error) {
             console.error(error);
@@ -44,7 +50,7 @@ const SignInScreen = () => {
                 <TextInput
                     placeholder="Email Address"
                     style={styles.input}
-                    value={email}
+                    value={username}
                     onChangeText={setEmail}
                     keyboardType="email-address"
                     autoCapitalize="none"

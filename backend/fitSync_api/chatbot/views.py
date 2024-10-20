@@ -62,8 +62,8 @@ def webhook(request):
             "role": "system",
             "content": (
                 f"You are a medical professional chatbot. You are given with data of symptoms the user provides. "
-                f"Provide responses of multiple conditions they could be suffering from, with confidence scores. "
-                f"Provide just that in response in JSON. Here's the medical background of the user: {response_message}"
+                f"Provide responses of multiple conditions they could be suffering from and some preventive measures "
+                f"Provide smaller response and just that response. Here's the medical background of the user: {response_message}"
             ),
         },
         {
@@ -82,15 +82,15 @@ def webhook(request):
         response = chat_completion.choices[0].message.content
 
         # Extract JSON data from the response using regex
-        json_match = re.search(r'\[.*\]', response, re.DOTALL)
-        if json_match:
-            json_data = json_match.group()
-            json_object = json.loads(json_data)
+        # json_match = re.search(r'\[.*\]', response, re.DOTALL)
+        # if json_match:
+        #     json_data = json_match.group()
+        #     json_object = json.loads(json_data)
 
             # Save the JSON data or process it further
-            return Response(json_object, status=200)
-        else:
-            return Response({"error": "No JSON data found in the response."}, status=400)
+        return Response(response, status=200)
+        # else:
+        #     return Response({"error": "No JSON data found in the response."}, status=400)
         
     except Exception as e: 
         return Response({"error": str(e)}, status=500)
@@ -141,6 +141,7 @@ def diet(request):
             "bmi": bmi,
             "bmr": bmr
         }
+        print(data)
         input = np.array([[age, weight, height_cm/100, 1 if gender == "male" else 0, bmi, bmr, 2]])
         model_path = "calories_prediction_model.pkl"
         model = joblib.load(model_path)
@@ -149,7 +150,7 @@ def diet(request):
         api_key = "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"
         messages=[
                     {"role":"system",
-                    "content":"Give the response in JSON. Suggest diet plans as response. JSON should contain dishname, cuisine, type, calories, proteins, fats"},
+                    "content":"Give the response in just the JSON. Suggest diet plans as response. JSON should contain dishname, cuisine, type, calories, proteins, fats. Suggest Indian foods"},
                     {
                         "role": "user",
                         "content": f"Suggest food with calories : {predicted_calories}",
@@ -166,17 +167,48 @@ def diet(request):
 
             response = chat_completion.choices[0].message.content
             
-            json_match = re.search(r'\[.*\]', response, re.DOTALL)
-            if json_match:
-                json_data = json_match.group()
-                json_object = json.loads(json_data)
+            # json_match = re.search(r'\[.*\]', response, re.DOTALL)
+            # if json_match:
+            #     json_data = json_match.group()
+            #     json_object = json.loads(json_data)
                 
-                return Response(json_object, status=200)
-            else:
-                return Response("No JSON data found in the response.", status=404)
+            return Response(response, status=200)
+            # else:
+            #     return Response("No JSON data found in the response.", status=404)
         except Exception as e:
+            print(f"{e} Error")
             return Response(f"An error occurred: {e}",status=500)
     except Exception as e:
+        print(e)
         return Response(f"An error occurred: {e}",status=500)
     
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_diet_data(request):
+    user = request.user
+    try:
+        patient = Patient.objects.get(user=user)
+        weight_entry = Weight.objects.filter(patient=patient).order_by('-measurement_date').first()
+        weight = weight_entry.value if weight_entry else None
+
+        height_cm = patient.height
+        birth_date = patient.personal_details.date_of_birth
+        gender = patient.personal_details.gender
+        age = get_age(birth_date)
+
+        bmi = calculate_bmi(weight, height_cm)
+        bmr = calculate_bmr(weight, height_cm, age, gender)
+
+        data = {
+            "age": age,
+            "gender": gender,
+            "height": height_cm/100,
+            "weight": weight,
+            "bmi": bmi,
+            "bmr": bmr,
+            "activityLevel":2
+        }
+        return Response(data,status=200)
+    except Exception as e:
+        return Response(f"An error occurred: {e}",status=500)

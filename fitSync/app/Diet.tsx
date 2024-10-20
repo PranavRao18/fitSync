@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DietSuggestionsScreen = () => {
     const router = useRouter();
@@ -16,21 +18,35 @@ const DietSuggestionsScreen = () => {
     });
     const [loading, setLoading] = useState(false);
     const [dietPlan, setDietPlan] = useState<string | null>(null);
+    const token = AsyncStorage.getItem('access_token');
 
     // Fetch User Data from Database (Mock Function)
     const fetchUserData = async () => {
         try {
+            const token =await AsyncStorage.getItem('access_token');
             // Assume fetching from backend or database
-            const fetchedData = {
-                age: 25,
-                weight: 70,
-                height: 1.75,
-                gender: 'Male',
-                BMI: 22.9,
-                BMR: 1600,
-                activityLevel: 'Moderate',
-            };
-            setUserData(fetchedData);
+            console.log(token)
+            const response = await axios.get(
+                "https://2762-2409-40f2-146-a541-e837-d35c-92f3-42d7.ngrok-free.app/api/get_diet/",
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Include the Bearer token
+                        'Content-Type': 'application/json', // Set Content-Type if needed
+                    },
+                }
+            );
+            const data = response.data;
+
+            // Map response data to state, using defaults for null values
+            setUserData({
+                age: data.age || 0,
+                weight: data.weight !== null ? data.weight : 0,
+                height: data.height || 0,
+                gender: data.gender || '',
+                BMI: data.bmi !== null ? data.bmi : 0,
+                BMR: data.bmr !== null ? data.bmr : 0,
+                activityLevel: data.activityLevel !== null ? data.activityLevel : '',
+            });
         } catch (error) {
             console.error("Failed to fetch user data", error);
         }
@@ -42,19 +58,29 @@ const DietSuggestionsScreen = () => {
 
     const generateDietPlan = async () => {
         setLoading(true);
+        const token = await AsyncStorage.getItem('access_token');
         try {
-            // Placeholder for model prediction and LLM logic
-            const calorieIntake = await predictCalorieIntake(userData); // Call your calorie prediction model here
-
-            // Assume sending `calorieIntake` to an LLM for generating diet suggestions
-            const dietSuggestion = await fetchDietPlanFromLLM(calorieIntake);
-            setDietPlan(dietSuggestion);
+            const response = await axios.get(
+                "https://2762-2409-40f2-146-a541-e837-d35c-92f3-42d7.ngrok-free.app/api/diet/",
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            console.log(response.data);
         } catch (error) {
-            Alert.alert("Error", "Failed to generate diet suggestions. Please try again.");
+            // Extract error message
+            const errorMessage = error.response?.data?.message || error.message || "An unknown error occurred";
+            console.error(error);
+            Alert.alert("Error", errorMessage); // Show the error in an alert
         } finally {
             setLoading(false);
         }
     };
+    
+    
 
     // Placeholder function for predicting calorie intake using the model
     const predictCalorieIntake = async (data: any) => {

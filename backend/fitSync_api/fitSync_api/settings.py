@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-e30m-(61qv6ja*qlcn$y@g_h7y*6*u$4-8g0g17z*9gf2@j3cr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['2762-2409-40f2-146-a541-e837-d35c-92f3-42d7.ngrok-free.app']
 
 
 # Application definition
@@ -93,6 +94,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8081',  # React Native (Expo) local server
     'http://127.0.0.1:8081',
+    'http://2762-2409-40f2-146-a541-e837-d35c-92f3-42d7.ngrok-free.app'
     # Add other origins as needed
 ]
 
@@ -142,6 +144,13 @@ USE_I18N = True
 
 USE_TZ = True
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365 * 10),  # Set to 10 years or longer
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365 * 10),  # Extend refresh token if needed
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

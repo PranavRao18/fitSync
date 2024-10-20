@@ -8,6 +8,7 @@ import dietImg from '../assets/images/diet.png';
 import exerciseImg from '../assets/images/exercise.png';
 import HealthMetricScreen from './HealthMetric';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Mock user name and health metrics for demonstration
 const userName = "John Doe"; // Replace with dynamic data if available
@@ -24,7 +25,6 @@ const HomeScreen = () => {
     const [showRightArrow, setShowRightArrow] = useState(true);
     const [showLeftArrow, setShowLeftArrow] = useState(false);
     const rightArrowAnim = new Animated.Value(1);
-
     const handleChatBot = () => {
         // Add authentication logic here
         router.push('/Chatbot'); // Navigate to Home screen after sign in
