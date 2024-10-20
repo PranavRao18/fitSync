@@ -162,6 +162,14 @@ A high-level Python web framework.
 A framework and platform for universal React applications.
 
 
+## Dataset Links
+
+https://www.kaggle.com/datasets/saurabh00007/diabetescsv
+https://www.kaggle.com/datasets/mansoordaku/ckdisease
+https://archive.ics.uci.edu/dataset/45/heart+disease
+https://www.kaggle.com/datasets/vechoo/diet-plan-recommendation/data
+
+
 ## Screenshots
 
 <!-- Add screenshots of your app, similar to the `cli-Mate` README -->
