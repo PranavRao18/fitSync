@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import chatbotImg from '../assets/images/chatbot.png';
 import medicationImg from '../assets/images/medications.png';
+import riskImg from  '../assets/images/riskImg.png'
 import dietImg from '../assets/images/diet.png';
 import exerciseImg from '../assets/images/exercise.png';
 import HealthMetricScreen from './HealthMetric';
@@ -31,13 +32,21 @@ const HomeScreen = () => {
     };
 
     const handleMedication = () => {
-        router.push('/Medications');
+        // router.push('/Medications');
         //When there is some medications already kelgade route, illa andre melgade route
-        // router.push('/MyMedications');
+        router.push('/MyMedications');
     }
 
     const handleDiet = () => {
         router.push('/Diet');
+    }
+
+    const handleExercise = () => {
+        router.push('/ExerciseSuggestion');
+    }
+
+    const handleRisk = () => {
+        router.push('/RiskAssessment');
     }
 
     // Pulse animation for right arrow
@@ -187,7 +196,8 @@ const HomeScreen = () => {
                 </ImageBackground>
             </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.chatbotBox}>
+                    <TouchableOpacity style={styles.chatbotBox}
+                    onPress={handleExercise}>
                         <ImageBackground
                             source={exerciseImg}
                             style={styles.chatbotImageBackground}
@@ -197,6 +207,21 @@ const HomeScreen = () => {
                             <Text style={styles.boxTitle}>Exercises</Text>
                             <Text style={styles.boxDescription}>
                                 View exercises recommended by Dr. Ayu
+                            </Text>
+                        </ImageBackground>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.chatbotBox}
+                    onPress={handleRisk}>
+                        <ImageBackground
+                            source={riskImg}
+                            style={styles.chatbotImageBackground}
+                            imageStyle={styles.chatbotImage}
+                        >
+                            <View style={styles.overlay} />
+                            <Text style={styles.boxTitle}>Risk Analysis</Text>
+                            <Text style={styles.boxDescription}>
+                                View risk predictions by Dr. Ayu
                             </Text>
                         </ImageBackground>
                     </TouchableOpacity>
