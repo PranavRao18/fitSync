@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
 const ProfileScreen = () => {
-    const userHealthDataURL = 'http://10.80.4.155:8081/PublicProfile?userId=hi'; // Replace with your actual URL
+    const userHealthDataURL = 'http://10.80.5.211:8081/PublicProfile?userId=8b9d530d-233c-487c-8829-f79412be7af4'; // Replace with your actual URL
 
     return (
         <View style={styles.container}>
