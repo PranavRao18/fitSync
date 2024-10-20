@@ -1,16 +1,35 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const API_URL = 'http://127.0.0.1:8000/api/token/'; // Replace with your actual backend URL
 
 const SignInScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
 
-    const handleSignIn = () => {
-        // Add authentication logic here
-        router.push('/HomeScreen'); // Navigate to Home screen after sign in
+    const handleSignIn = async () => {
+        try {
+            const response = await axios.post(API_URL, {
+                email,
+                password,
+            });
+
+            const { access, refresh } = response.data;
+
+            // Store the tokens in AsyncStorage
+            await AsyncStorage.setItem('access_token', access);
+            await AsyncStorage.setItem('refresh_token', refresh);
+
+            // Navigate to the Home screen
+            router.push('/HomeScreen');
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Login Failed', 'Invalid email or password. Please try again.');
+        }
     };
 
     return (
@@ -103,25 +122,6 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         fontSize: 16,
-    },
-    rememberForgotContainer: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    rememberMe: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    rememberMeText: {
-        marginLeft: 5,
-        color: '#333',
-    },
-    forgotPasswordText: {
-        color: '#15B9A6',
-        fontWeight: '600',
     },
     button: {
         backgroundColor: '#15B9A6',
