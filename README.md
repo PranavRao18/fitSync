@@ -164,10 +164,10 @@ A framework and platform for universal React applications.
 
 ## Dataset Links
 
-https://www.kaggle.com/datasets/saurabh00007/diabetescsv
-https://www.kaggle.com/datasets/mansoordaku/ckdisease
-https://archive.ics.uci.edu/dataset/45/heart+disease
-https://www.kaggle.com/datasets/vechoo/diet-plan-recommendation/data
+1. https://www.kaggle.com/datasets/saurabh00007/diabetescsv
+2. https://www.kaggle.com/datasets/mansoordaku/ckdisease
+3. https://archive.ics.uci.edu/dataset/45/heart+disease
+4. https://www.kaggle.com/datasets/vechoo/diet-plan-recommendation/data
 
 
 ## Screenshots
