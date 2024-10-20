@@ -141,9 +141,6 @@ We are working on hosting the server for easier access. Until then, you can set 
     ```
 
 ## TECHSTACK - Built with
-<div style="display: flex; justify-content: center; gap: 50px; align-items: center;">
-    <img src="https://github.com/yourusername/fitSync/assets/images/tech-stack" width="45%">
-</div>
 
 [![Tech](https://skillicons.dev/icons?i=react,typescript,python,django,expo)](https://skillicons.dev)
 
@@ -168,6 +165,26 @@ A framework and platform for universal React applications.
 ## Screenshots
 
 <!-- Add screenshots of your app, similar to the `cli-Mate` README -->
+<img src="https://github.com/user-attachments/assets/27fc8d31-5561-4ca8-89f0-8a85c41ed99b" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/d083e0f8-a875-4b7b-8471-569619c716c1" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/e3440cdd-c14e-439f-ac10-5df48f463e09" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/41f7c2a7-0407-4807-af1b-e2f676873f38" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/e98ee5cc-98e2-4e9a-bf2d-5b78b5c711be" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/d3f97f65-9ed4-493b-8c6e-322510c55293" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/a7f09326-3691-4f06-9c79-00ffde80ff42" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/0c033a4d-94a0-4a03-b36b-e01b1617a0c8" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/2d329490-212f-4f98-a0d8-fad6104680d8" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/5bfad06a-6a41-4ed2-9e8b-0255be829fd6" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/f82e639a-1d58-4761-9a26-a0c36f76b264" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/53677300-9cd5-4778-8c28-712c2ee7b4d0" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/d4789169-a33b-4a92-983c-f60cd39e02ae" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/e418f7c8-21c6-47a7-b847-28bd9d34dd41" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/fdcd7e83-ef0c-4141-b72b-e2833cc2c9a9" style="width: 200px;" />
+<img src="https://github.com/user-attachments/assets/efda3b3f-703d-4391-817c-bd1c6d00544b" style="width: 200px;" />
+
+
+
+
 
 ## The Team:
 **Pranav Anantha Rao**
