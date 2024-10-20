@@ -6,27 +6,22 @@ import { useLocalSearchParams } from 'expo-router';
 const PublicProfileScreen = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [medicationHistory, setMedicationHistory] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const { userId } = useLocalSearchParams(); // Retrieve userId from the QR code or URL
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const userResponse = await axios.get(`https://your-backend-url.com/api/user/${userId}`);
-                const medicationResponse = await axios.get(`https://your-backend-url.com/api/user/${userId}/medications`);
+    // useEffect(() => {
+    //     const fetchUserData = async () => {
+    //         try {
+    //             setLoading(false);
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //             setLoading(false);
+    //         }
+    //     };
 
-                setUserInfo(userResponse.data);
-                setMedicationHistory(medicationResponse.data);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setLoading(false);
-            }
-        };
-
-        fetchUserData();
-    }, [userId]);
+    //     fetchUserData();
+    // }, [userId]);
 
     if (loading) {
         return <ActivityIndicator size="large" color="#15B9A6" style={styles.loader} />;
@@ -35,30 +30,29 @@ const PublicProfileScreen = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Patient Profile</Text>
-            {userInfo && (
-                <View style={styles.infoContainer}>
-                    <Text style={styles.infoText}>Name: {userInfo.name}</Text>
-                    <Text style={styles.infoText}>Gender: {userInfo.gender}</Text>
-                    <Text style={styles.infoText}>Date of Birth: {userInfo.dob}</Text>
-                    <Text style={styles.infoText}>Height: {userInfo.height} cm</Text>
-                    <Text style={styles.infoText}>Weight: {userInfo.weight} kg</Text>
-                </View>
-            )}
+            <View style={styles.infoContainer}>
+                <Text style={styles.infoText}>Name: Sanath Naik</Text>
+                <Text style={styles.infoText}>Gender: Male</Text>
+                <Text style={styles.infoText}>Date of Birth: 07/03/2004</Text>
+                <Text style={styles.infoText}>Height: 175 cm</Text>
+                <Text style={styles.infoText}>Weight: 55 kg</Text>
+            </View>
 
             <Text style={styles.subTitle}>Medication History</Text>
-            <FlatList
-                data={medicationHistory}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <View style={styles.medicationItem}>
-                        <Text style={styles.medicationText}>Medicine: {item.name}</Text>
-                        <Text style={styles.medicationText}>Dosage: {item.dosage}</Text>
-                        <Text style={styles.medicationText}>Frequency: {item.frequency}</Text>
-                        <Text style={styles.medicationText}>Start Date: {item.startDate}</Text>
-                        <Text style={styles.medicationText}>End Date: {item.endDate}</Text>
-                    </View>
-                )}
-            />
+            <View style={styles.medicationItem}>
+                <Text style={styles.medicationText}>Medicine: Albendozol</Text>
+                <Text style={styles.medicationText}>Dosage: 25mg</Text>
+                <Text style={styles.medicationText}>Frequency: 3</Text>
+                <Text style={styles.medicationText}>Start Date: 18/10/2024</Text>
+                <Text style={styles.medicationText}>End Date: 23/10/2024</Text>
+            </View>
+            <View style={styles.medicationItem}>
+                <Text style={styles.medicationText}>Medicine: Ibuprofen</Text>
+                <Text style={styles.medicationText}>Dosage: 50mg</Text>
+                <Text style={styles.medicationText}>Frequency: 3</Text>
+                <Text style={styles.medicationText}>Start Date: 18/10/2024</Text>
+                <Text style={styles.medicationText}>End Date: 23/10/2024</Text>
+            </View>
         </View>
     );
 };
