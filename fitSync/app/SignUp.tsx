@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
+import { registerUser } from './authService';
 
 const SignUpScreen = () => {
     const [fname, setFName] = useState('');
@@ -20,7 +21,6 @@ const SignUpScreen = () => {
             Alert.alert('Error', 'Passwords do not match. Please try again.');
             return;
         }
-        router.push('/AdditionalSignup');
 
         // Prepare the payload
         const payload = {
@@ -32,18 +32,12 @@ const SignUpScreen = () => {
         };
 
         try {
-            // Send data to the backend using axios
-            const response = await axios.post('https://your-backend-url/api/register', payload);
-            
-            if (response.status === 200) {
-                Alert.alert('Success', 'Account created successfully!');
-                // Navigate to the SignIn screen after successful sign-up
-                router.push('/AdditionalSignup');
-            } else {
-                Alert.alert('Error', 'Something went wrong. Please try again.');
-            }
+            // Call the registerUser service function
+            const result = await registerUser(payload);
+            Alert.alert('Success', 'Account created successfully!');
+            // Navigate to the AdditionalSignup screen after successful sign-up
+            router.push('/AdditionalSignup');
         } catch (error) {
-            console.error('Error during sign-up:', error);
             Alert.alert('Error', 'Failed to create account. Please try again.');
         }
     };
