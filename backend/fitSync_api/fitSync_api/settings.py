@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'authen',
     'patient',
     'corsheaders',
+    'chatbot',
 ]
 
 MIDDLEWARE = [

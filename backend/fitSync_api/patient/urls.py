@@ -4,7 +4,7 @@ from .views import (
     add_heart_rate, add_glucose_level, add_oxygen_saturation,
     add_body_temperature, add_weight, create_patient, get_medications, get_patient_data
 )
-
+from chatbot.views import diet
 urlpatterns = [
     path('patient/emergency-contact/', add_emergency_contact, name='add_emergency_contact'),
     path('patient/medication/', add_medication, name='add_medication'),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('patient/weight/', add_weight, name='add_weight'),
     path('patient/create/',create_patient, name='add_patient'),
     path('patient/data/', get_patient_data, name='get_patient_data'),
+    path('diet/',diet, name='diet_suggest'),
 ]
