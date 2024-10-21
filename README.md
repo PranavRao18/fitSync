@@ -213,4 +213,4 @@ A framework and platform for universal React applications.
 **Gunanka D**
 
 [![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/gunanana)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)]([https://www.linkedin.com/in/satwik-kini-26a949252/](https://www.linkedin.com/in/gunanka-d-6301992ab/))
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/gunanka-d-6301992ab/)
